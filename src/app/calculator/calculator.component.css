@@ -1,0 +1,84 @@
+/* .container {
+  display: grid; 
+  grid-template-columns: repeat(4, 50px);
+  grid-template-rows: 25% auto;
+  grid-template-areas: 
+  "result result result result"
+  "number number number operator"
+  "number number number operator"
+  "number number number operator"
+  "number number number operator"
+  "number . number operator";
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.grid-item {
+  height: 50px;
+  background-color: yellow;
+} */
+:host {
+  display: block;
+  width: 90%;
+  margin: auto;
+  padding: 5em 0;
+}
+.container {
+  width: 300px;
+  border: 1px solid white;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 70px auto; 
+    grid-template-areas: 
+  "result result result result"
+  "clear clear clear operator"
+  "number number number operator"
+  "number number number operator"
+  "number number number operator"
+  "number number number operator";
+}
+
+.item {
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  text-align: center;
+  justify-self: center;
+}
+
+.number {
+  grid-area: number;
+  margin: 10px 0 10px;
+}
+
+.clear {
+  grid-area: clear;
+  margin: 10px 0 10px;
+}
+
+.clear .item {
+  border: 1px solid wheat;
+  justify-self: center;
+}
+
+.number .item {
+  border: 1px solid wheat;
+  justify-self: center;
+}
+
+.result {
+  grid-area: result;
+  background-color: rgba(0, 0, 0, 0.1)
+}
+
+.operator {
+  grid-area: operator;
+  background-color: orange;
+  margin: 10px;
+}
+
+.number-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 10px;
+}

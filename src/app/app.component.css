@@ -1,0 +1,48 @@
+p {
+  font-family: Lato;
+}
+.shapes-container {
+  width: 100%;
+  height: 5em;
+  position: fixed;
+}
+
+.shapes-container:hover > .top {
+    /* height: 150px;
+    width: 150px; */
+    width: 50px;
+    height: 50px;
+    transform: translateX(100px);
+}
+
+.shapes-container:hover > .bottom {
+    /* height: 150px;
+    width: 150px; */
+    transform: rotate(90deg);
+}
+
+.bottom {
+  position: absolute;
+  z-index: -1;
+  /* bottom: 5%;
+  left: -15%; */
+  left: 75px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(to right, #237db6, rgba(31,38,103,0.9));
+  transform: rotate(-45deg);
+    transition: all 500ms ease-out;
+}
+
+
+.top {
+  position: absolute;
+  z-index: 1;
+  /* bottom: -10%;
+  left: -15%; */
+  width: 200px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(to right, rgba(49,207,171,0.5), #50e3c2);
+    transition: all 500ms ease-out;
+}

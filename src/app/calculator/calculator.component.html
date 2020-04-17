@@ -1,0 +1,37 @@
+<div class="container">
+	<div class="result">
+		<p class="item">{{ digit$ | async }}</p>
+	</div>
+
+  <div class="clear number-container">
+    <div class="item" #clear>AC</div>
+		<div class="item" #toggleNegative>+/-</div>
+		<div class="item" #percentage>%</div>
+  </div>
+
+	<div class="number number-container" #number>
+		<div class="item">7</div>
+		<div class="item">8</div>
+		<div class="item">9</div>
+		<div class="item">4</div>
+		<div class="item">5</div>
+		<div class="item">6</div>
+		<div class="item">1</div>
+		<div class="item">2</div>
+		<div class="item">3</div>
+		<div class="item">0</div>
+    <div class="item"></div>
+		<div class="item">.</div>
+
+	</div>
+
+
+	<div class="operator">
+		<div class="item">&divide;</div>
+		<div class="item">x</div>
+		<div class="item">-</div>
+		<div class="item">+</div>
+		<div class="item">=</div>
+	</div>
+
+</div>
