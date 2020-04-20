@@ -91,10 +91,43 @@ export class CalculatorComponent implements OnInit {
             if (this.numbers.length === this.operators.length) {
               this.operators.pop();
             }
+            let n = [...this.numbers];
+            let o = [...this.operators];
+
+            // pass 1 for division and multiplicaiton
+            for (let i=0 ; i < o.length; i++){
+              if (o[i] === this.multiply) {
+                let result = n[i] * n[i+1];
+                let nextIndex = i + 2;
+                if (nextIndex < n.length - 1)  {
+                  n = [n.slice(0, i), result, n.slice(i+2)];
+                  console.log('multiply1: result/numbers', result, n);
+                }
+                else {
+                  n = [n.slice(0, i), result];
+                  console.log('multiply2: result/numbers', result, n);
+                }
+              }
+              if (o[i] === this.divide) {
+                let result = n[i] / n[i+1];
+                let nextIndex = i + 2;
+                if (nextIndex < n.length - 1) {
+                  n = [n.slice(0, i), result, n.slice(i+2)];
+                  console.log('divide1: result/numbers', result, n);
+                }
+                else {
+                  n = [n.slice(0, i), result];
+                  console.log('divide2: result/numbers', result, n);
+                }
+              }
+            }
+
+            // pass 2 for addition and subtraction
 
             // Use the result in the next operation
             this.currentNumber = this.result;
             console.log(this.numbers, this.operators);
+            break;
         }
       });
 
