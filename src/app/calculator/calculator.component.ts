@@ -8,17 +8,16 @@ import { map, reduce, scan } from "rxjs/operators";
   styleUrls: ["./calculator.component.css"]
 })
 export class CalculatorComponent implements OnInit {
-  @ViewChild("number") number;
+  @ViewChild("container") container;
+  input$;
+  multiply = '×';
+  divide = '÷';
+  add = '+';
+  subtract = '-';
 
-  text;
-  digit$;
-
-  // digitSubject = new Subject<number>();
-  // digit$ = this.digitSubject.asObservable();
-  // operatorSubject = new Subject<string>();
-  // operator$ = this.operatorSubject.asObservable();
-  // clearSubject = new Subject<boolean>();
-  // clear$ = this.clearSubject.asObservable();
+  currentNumber = '';
+  operators = [];
+  numbers = [];
 
   constructor() {}
 
@@ -26,33 +25,56 @@ export class CalculatorComponent implements OnInit {
 
   ngAfterViewInit() {
 
-    // this.num$ = fromEvent(this.number.nativeElement, 'click')
-    //   .subscribe(value => this.num = value.target.textContent);
-
-
-    // this.digit$ = fromEvent(this.number.nativeElement, "click").pipe(
-    //   map(event => event.target.textContent),
-    //   reduce((acc, curr) => {
-    //     console.log("acc", acc);
-    //     console.log("curr", curr);
-    //     return acc + curr;
-    //   }, "")
-    // ).subscribe(value => this.text = value);
-
-    this.digit$ = fromEvent(this.number.nativeElement, 'click')
+    this.input$ = fromEvent(this.container.nativeElement, 'click')
       .pipe(
-        map(event => event.target.textContent),
-        scan((acc, curr) => {
-          if (curr === '.') {
-            // is it a decimal?
-            let digit = parseFloat(acc);
-            if (Math.floor(digit) !== digit) {
-              return acc;
-            }
-          }
-          return acc + curr;
-        }, '')
+        map(event => event.target.textContent)
       )
+      .subscribe(value => {
+        switch (value) {
+          case '1':
+          case '2':
+          case '3': 
+          case '4': 
+          case '5':
+          case '6': 
+          case '7': 
+          case '9':
+          case '0':
+            this.currentNumber = this.currentNumber + value;
+            console.log('clicked', value)
+            break; 
+
+          case '.': 
+            if (!this.currentNumber.includes('.')) {
+              this.currentNumber = this.currentNumber + value;
+            }
+            break;
+
+          case this.add:
+          case this.subtract:
+          case this.multiply:
+          case this.divide:
+            // add current number
+            if (this.currentNumber) {
+              this.currentNumber = this.currentNumber.replace(/^0+/, '');
+              this.numbers = [...this.numbers, this.currentNumber];
+              this.currentNumber = '';
+            }
+
+
+            // if multiple operators are pressed
+            if (this.numbers.length === this.operators.length) {
+              this.operators[this.operators.length - 1] = value;
+            }
+            else {
+              this.operators = [...this.operators, value];
+            }
+
+            console.log(this.numbers, this.operators);
+            break;
+        }
+      });
+
   
   }
 
