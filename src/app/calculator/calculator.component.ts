@@ -18,7 +18,7 @@ export class CalculatorComponent implements OnInit {
   currentNumber = '';
   operators = [];
   numbers = [];
-  result;
+  result = 0;
 
   constructor() {}
 
@@ -91,41 +91,83 @@ export class CalculatorComponent implements OnInit {
             if (this.numbers.length === this.operators.length) {
               this.operators.pop();
             }
-            let n = [...this.numbers];
-            let o = [...this.operators];
+
+            // let n = [...this.numbers];
+            // let o = [...this.operators];
 
             // pass 1 for division and multiplicaiton
-            for (let i=0 ; i < o.length; i++){
-              if (o[i] === this.multiply) {
-                let result = n[i] * n[i+1];
-                let nextIndex = i + 2;
-                if (nextIndex < n.length - 1)  {
-                  n = [n.slice(0, i), result, n.slice(i+2)];
-                  console.log('multiply1: result/numbers', result, n);
-                }
-                else {
-                  n = [n.slice(0, i), result];
-                  console.log('multiply2: result/numbers', result, n);
-                }
+            // for (let i=0 ; i < o.length; i++) {
+            //   if (o[i] === this.multiply) {
+            //     let result = this.numbers[i] * this.numbers[i+1];
+
+            //     let nextIndex = i + 2;
+
+            //     if (nextIndex < n.length - 1)  {
+            //       n = [...n.slice(0, i), result, ...this.numbers.slice(i+2)];
+            //       console.log('multiply1: result/numbers', result, n);
+            //     }
+            //     else {
+            //       n = [...n.slice(0, i), result];
+            //       console.log('multiply2: result/numbers', result, n);
+            //     }
+            //   }
+            //   if (o[i] === this.divide) {
+            //     let result = this.numbers[i] / this.numbers[i+1];
+            //     let nextIndex = i + 2;
+            //     if (nextIndex < n.length - 1) {
+            //       n = [...n.slice(0, i), result, ...this.numbers.slice(i+2)];
+            //       console.log('divide1: result/numbers', result, n);
+            //     }
+            //     else {
+            //       n = [...n.slice(0, i-1), result];
+            //       console.log('divide2: result/numbers', result, n);
+            //     }
+            //   }
+            // }
+            let newNumbers = [];
+            let newOperators = [];
+            let operand1;
+            let result = 0;
+            for (let i = 0; i < this.operators.length; i++) {
+
+              operand1 = operand1 ? operand1 : this.numbers[i];
+
+              if (this.operators[i] === this.divide) {
+                operand1 = operand1 / this.numbers[i+1];
               }
-              if (o[i] === this.divide) {
-                let result = n[i] / n[i+1];
-                let nextIndex = i + 2;
-                if (nextIndex < n.length - 1) {
-                  n = [n.slice(0, i), result, n.slice(i+2)];
-                  console.log('divide1: result/numbers', result, n);
-                }
-                else {
-                  n = [n.slice(0, i), result];
-                  console.log('divide2: result/numbers', result, n);
-                }
+              
+              if (this.operators[i] === this.multiply) {
+                operand1 = operand1 * this.numbers[i+1];
+
               }
+
+              if (this.operators[i] === '+' || this.operators[i] === '-') {
+                newNumbers.push(operand1);
+                operand1 = null;
+                newOperators.push(this.operators[i]); 
+
+                if (i === this.operators.length - 1) {
+                  newNumbers.push(this.numbers[i+1]);
+                }
+              } 
             }
+            console.log('newNumbers/newOperators', newNumbers, newOperators)
 
             // pass 2 for addition and subtraction
-
+            this.result = +newNumbers[0];
+            for (let i = 0; i < newOperators.length; i++) {
+              switch (newOperators[i]) {
+                case '+':
+                  this.result += +newNumbers[i+1];
+                  break;
+                case '-':
+                  this.result -= newNumbers[i+1];
+                  break;
+              }
+            }
+            console.log('result', this.result);
             // Use the result in the next operation
-            this.currentNumber = this.result;
+            this.currentNumber = this.result.toString();
             console.log(this.numbers, this.operators);
             break;
         }
