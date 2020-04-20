@@ -18,6 +18,7 @@ export class CalculatorComponent implements OnInit {
   currentNumber = '';
   operators = [];
   numbers = [];
+  result;
 
   constructor() {}
 
@@ -31,6 +32,12 @@ export class CalculatorComponent implements OnInit {
       )
       .subscribe(value => {
         switch (value) {
+          case 'AC':
+            this.currentNumber = '';
+            this.numbers = [];
+            this.operators = [];
+            this.result = null;
+            break;
           case '1':
           case '2':
           case '3': 
@@ -54,10 +61,14 @@ export class CalculatorComponent implements OnInit {
           case this.subtract:
           case this.multiply:
           case this.divide:
-            // add current number
+
             if (this.currentNumber) {
+              // strip leading zeros
               this.currentNumber = this.currentNumber.replace(/^0+/, '');
+
               this.numbers = [...this.numbers, this.currentNumber];
+
+              // reset currentNumber
               this.currentNumber = '';
             }
 
@@ -72,6 +83,18 @@ export class CalculatorComponent implements OnInit {
 
             console.log(this.numbers, this.operators);
             break;
+
+          case '=':
+            if (this.currentNumber) {
+              this.numbers = [...this.numbers, this.currentNumber];
+            }
+            if (this.numbers.length === this.operators.length) {
+              this.operators.pop();
+            }
+
+            // Use the result in the next operation
+            this.currentNumber = this.result;
+            console.log(this.numbers, this.operators);
         }
       });
 
