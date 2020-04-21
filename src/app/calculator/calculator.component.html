@@ -1,6 +1,10 @@
 <div class="container" #container>
 	<div class="result">
-		<p class="item text-align-right">{{ currentNumber }}</p>
+
+    <span class="text-small" *ngFor="let input of userInput" >
+        {{input}} 
+    </span>
+		<p class="text-align-right">{{ currentNumber ? currentNumber : previousNumber }}</p>
 	</div>
 
   <div class="clear number-container">

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
 * {
   box-sizing: border-box;
 }
@@ -7,8 +9,13 @@ body {
   background:  linear-gradient(#8936c9,rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1535068484622-7a077e5aa558?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
   background-size: cover;
   height: 100vh;
+  font-family: 'Audiowide', cursive;
 }
 
 .text-align-right {
   text-align: right;
+}
+
+.text-small {
+  font-size: 0.6em;
 }

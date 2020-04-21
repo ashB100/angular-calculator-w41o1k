@@ -8,24 +8,19 @@ p {
 }
 
 .shapes-container:hover > .top {
-    /* height: 150px;
-    width: 150px; */
     width: 50px;
     height: 50px;
+    left: 0;
     transform: translateX(100px);
 }
 
 .shapes-container:hover > .bottom {
-    /* height: 150px;
-    width: 150px; */
     transform: rotate(90deg);
 }
 
 .bottom {
   position: absolute;
-  z-index: -1;
-  /* bottom: 5%;
-  left: -15%; */
+  z-index: -2;
   left: 75px;
   width: 50px;
   height: 50px;
@@ -37,11 +32,10 @@ p {
 
 .top {
   position: absolute;
-  z-index: 1;
-  /* bottom: -10%;
-  left: -15%; */
-  width: 200px;
+  z-index: -1;
+  width: 100px;
   height: 20px;
+  left: 50px;
   border-radius: 50%;
   background: linear-gradient(to right, rgba(49,207,171,0.5), #50e3c2);
     transition: all 500ms ease-out;

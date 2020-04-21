@@ -19,6 +19,8 @@ export class CalculatorComponent implements OnInit {
   operators = [];
   numbers = [];
   result = 0;
+  userInput = [];
+  previousNumber = '0';
 
   constructor() {}
 
@@ -36,7 +38,8 @@ export class CalculatorComponent implements OnInit {
             this.currentNumber = '0';
             this.numbers = [];
             this.operators = [];
-            this.result = null;
+            this.userInput = [];
+            this.result = 0;
             break;
           case '1':
           case '2':
@@ -50,7 +53,7 @@ export class CalculatorComponent implements OnInit {
           case '0':
             this.currentNumber = this.currentNumber + value;
             this.currentNumber = this.currentNumber.replace(/^0+/, '');
-            console.log('clicked', value)
+            console.log('clicked', value);
             break; 
 
           case '.': 
@@ -76,7 +79,10 @@ export class CalculatorComponent implements OnInit {
               // strip leading zeros
               this.numbers = [...this.numbers, this.currentNumber];
 
+              this.userInput = [...this.userInput, this.currentNumber];
+
               // reset currentNumber
+              this.previousNumber = this.currentNumber;
               this.currentNumber = '';
             }
 
@@ -89,6 +95,8 @@ export class CalculatorComponent implements OnInit {
               this.operators = [...this.operators, value];
             }
 
+            this.userInput = [...this.userInput, this.operators[this.operators.length-1]];
+
             console.log(this.numbers, this.operators);
             break;
 
@@ -98,12 +106,15 @@ export class CalculatorComponent implements OnInit {
             }
             if (this.numbers.length === this.operators.length) {
               this.operators.pop();
+            } else {
+              this.userInput = [...this.userInput, this.numbers[this.numbers.length-1]];
             }
-
+            
             let newNumbers = [];
             let newOperators = [];
             let operand1;
-            let result = 0;
+
+            // Pass 1: Multiplication and division
             for (let i = 0; i < this.operators.length; i++) {
               operand1 = operand1 ? operand1 : this.numbers[i];
 
@@ -112,12 +123,8 @@ export class CalculatorComponent implements OnInit {
               }
               
               if (this.operators[i] === this.multiply) {
-                console.log('multiply', operand1, this.numbers[i+1])
                 operand1 = +operand1 * +this.numbers[i+1];
-                console.log('result', operand1);
               }
-
-              this.result = operand1;
 
               if (this.operators[i] === '+' || this.operators[i] === '-') {
                 newNumbers.push(operand1);
@@ -129,21 +136,25 @@ export class CalculatorComponent implements OnInit {
                 }
               } 
             }
+
+            // If there are only multiplications and/or divisions then  operand1 has the result:
+            this.result = operand1 ? operand1 : this.currentNumber;
+
             console.log('newNumbers/newOperators', newNumbers, newOperators)
 
             if (newNumbers.length) {
-            // pass 2 for addition and subtraction
-            this.result = +newNumbers[0];
-            for (let i = 0; i < newOperators.length; i++) {
-              switch (newOperators[i]) {
-                case '+':
-                  this.result += +newNumbers[i+1];
-                  break;
-                case '-':
-                  this.result -= +newNumbers[i+1];
-                  break;
+              // Pass 2: Add and subtract 
+              this.result = +newNumbers[0];
+              for (let i = 0; i < newOperators.length; i++) {
+                switch (newOperators[i]) {
+                  case '+':
+                    this.result += +newNumbers[i+1];
+                    break;
+                  case '-':
+                    this.result -= +newNumbers[i+1];
+                    break;
+                }
               }
-            }
             }
 
             console.log('result', this.result);
@@ -151,8 +162,7 @@ export class CalculatorComponent implements OnInit {
             this.currentNumber = this.result.toString();
             this.numbers = [];
             this.operators = [];
-            console.log(this.numbers, this.operators);
-            break;
+            this.userInput = [];
         }
       });
 
