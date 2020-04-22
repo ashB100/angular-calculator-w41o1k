@@ -16,7 +16,7 @@
   "number number number operator"
   "number number number operator"
   "number number number operator"
-  "number number number operator";
+  "number number number evaluate";
 }
 
 .result {
@@ -31,6 +31,11 @@
   color: #fff;
   text-align: center;
   justify-self: center;
+}
+
+.evaluate {
+  background-color: wheat;
+  margin: 10px
 }
 
 .number {
@@ -63,8 +68,6 @@
   inset 0px 0px 3px rgba(255,255,255,.5);
 }
 
-
-
 .result {
   grid-area: result;
   background-color: rgba(0, 0, 0, 0.1)
@@ -72,7 +75,6 @@
 
 .operator {
   grid-area: operator;
-  /* background-color: orange; */
   margin: 10px;
 }
 
@@ -85,4 +87,10 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   row-gap: 10px;
+}
+
+button {
+  background: inherit;
+  outline: none;
+  border: none;
 }

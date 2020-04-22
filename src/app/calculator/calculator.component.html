@@ -16,7 +16,7 @@
 		<div class="item" #percentage>%</div>
   </div>
 
-	<div class="number number-container" #number>
+	<div class="number number-container" #operand>
 		<div class="item">7</div>
 		<div class="item">8</div>
 		<div class="item">9</div>
@@ -33,12 +33,15 @@
 	</div>
 
 
-	<div class="operator">
+	<div class="operator" #operator>
 		<div class="item">÷</div>
 		<div class="item">×</div>
 		<div class="item">-</div>
 		<div class="item">+</div>
-		<div class="item">=</div>
 	</div>
+
+<div class="evaluate">
+  <button class="item">=</button>
+</div>
 
 </div>
