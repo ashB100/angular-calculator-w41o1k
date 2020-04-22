@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren } from "@angular/core";
-import { Subject, fromEvent, Observable } from "rxjs";
-import { map, reduce, scan } from "rxjs/operators";
+import { Subject, fromEvent, Observable, combineLatest } from "rxjs";
+import { map, reduce, scan, withLatestFrom } from "rxjs/operators";
 
 @Component({
   selector: "app-calculator",
@@ -11,14 +11,22 @@ export class CalculatorComponent implements OnInit {
   @ViewChild("container") containerRef;
   @ViewChild('operand') operandRef;
   @ViewChild('operator') operatorRef;
+  @ViewChild('toggleNegative') toggleNegativeRef;
+  @ViewChild('clear') clearRef;
+  @ViewChild('percentage') percentageRef;
+
   input$: Observable<string>;
   operator$: Observable<string>;
   operand$: Observable<string>;
+  clear$: Observable<string>;
+  toggleNegative$: Observable<string>;
+  percentage$: Observable<string>;
+  currentOperand$: Observable<string>;
 
-  multiply = '×';
-  divide = '÷';
-  add = '+';
-  subtract = '-';
+  multiplication = '×';
+  division = '÷';
+  addition = '+';
+  subtraction = '-';
 
   currentNumber = '0';
   operators = [];
@@ -26,6 +34,7 @@ export class CalculatorComponent implements OnInit {
   result = 0;
   userInput = [];
   previousNumber = '0';
+
   lookup = {
     'AC': () => this.reset(),
     '0': (value) => this.collateOperandString(value),
@@ -44,14 +53,6 @@ export class CalculatorComponent implements OnInit {
     '%': () => this.getPercentage(),
     '=': () => this.evaluateResult()
   };
-
-  // currentNumber;
-  // operators;
-  // numbers;
-  // result;
-  // userInput;
-  // previousNumber;
-  // lookup;
 
   evaluateResult() {
     console.log('Evaluate Results');
@@ -75,11 +76,11 @@ export class CalculatorComponent implements OnInit {
     for (let i = 0; i < this.operators.length; i++) {
       operand1 = operand1 ? operand1 : this.numbers[i];
 
-      if (this.operators[i] === this.divide) {
+      if (this.operators[i] === this.division) {
         operand1 = +operand1 / +this.numbers[i+1];
       }
               
-      if (this.operators[i] === this.multiply) {
+      if (this.operators[i] === this.multiplication) {
         operand1 = +operand1 * +this.numbers[i+1];
       }
 
@@ -105,10 +106,10 @@ export class CalculatorComponent implements OnInit {
       this.result = +newNumbers[0];
       for (let i = 0; i < newOperators.length; i++) {
         switch (newOperators[i]) {
-          case '+':
+          case this.addition:
             this.result += +newNumbers[i+1];
             break;
-          case '-':
+          case this.subtraction:
             this.result -= +newNumbers[i+1];
             break;
         }
@@ -166,14 +167,6 @@ export class CalculatorComponent implements OnInit {
     this.currentNumber = (+this.currentNumber / 100).toString();
   }
 
-  sum() {
-
-  }
-
-  times() {
-
-  }
-
   reset() {
     this.currentNumber = '0';
     this.numbers = [];
@@ -182,9 +175,7 @@ export class CalculatorComponent implements OnInit {
     this.result = 0;
   }
 
-  constructor() {
-
-  }
+  constructor() {}
 
   ngOnInit() {
 
@@ -193,23 +184,59 @@ export class CalculatorComponent implements OnInit {
   ngAfterViewInit() {
     this.operator$ = fromEvent(this.operatorRef.nativeElement, 'click')
       .pipe(
-        // map(event => event.target.textContent)
+        map(event => {
+          event.preventDefault();
+          event.stopPropagation();
+          return event.target.textContent;
+        })
       )
-      .subscribe(event => {
-        this.lookup.operator(event.target.textContent);
-        event.preventDefault();
-        event.stopPropagation();
+      .subscribe(value => {
+        this.lookup.operator(value);
       });
 
-    // this.operand$ = fromEvent(this.operandRef.nativeElement, 'click')
+    this.operand$ = fromEvent(this.operandRef.nativeElement, 'click')
+      .pipe(
+        map(event => {
+          // event.stopPropagation();
+          // event.preventDefault();
+          return event.target.textContent;
+        }),
+        scan( (acc, curr) => {
+          acc = acc.replace(/^0+/, '');
+          acc = (curr === '.' && acc.includes('.')) ? acc : acc + curr;
+          console.log('operand$', acc);
+          return acc;
+        }, '')
+      );
+
+
+    this.clear$ = fromEvent(this.clearRef.nativeElement, 'click')
+      .pipe(
+        map(event => '0')
+      );
+    
+    // this.toggleNegative$ = fromEvent(this.toggleNegativeRef.nativeElement, 'click')
     //   .pipe(
-        
+    //     withLatestFrom(this.operand$),
+    //     map((event, operand) => {
+    //       console.log('Toggle Negative', operand);
+    //       return (+operand * -1).toString()
+    //     })
     //   )
-    //   .subscribe(event => {
-    //     event.stopPropagation();
-    //     event.preventDefault();
-    //     this.lookup.operand(event.target.textContent);
-    //   })
+    //   .subscribe(value => console.log('Toggle Negative', value));
+
+    this.toggleNegative$ = combineLatest(fromEvent(this.toggleNegativeRef.nativeElement, 'click'), this.operand$)
+      .pipe(
+        map((event, operand) => {
+          console.log('Toggle Negative', operand);
+          return (+operand * -1).toString();
+        })
+      ).subscribe(value => console.log('Toggle Negative', value));
+
+    this.percentage$ = fromEvent(this.percentageRef.nativeElement, 'click')
+      .pipe(
+        map(event => event.target.textContent)
+      );
 
     this.input$ = fromEvent(this.containerRef.nativeElement, 'click')
       .pipe(
