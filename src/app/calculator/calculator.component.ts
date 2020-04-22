@@ -53,7 +53,6 @@ export class CalculatorComponent implements OnInit {
           case '0':
             this.currentNumber = this.currentNumber + value;
             this.currentNumber = this.currentNumber.replace(/^0+/, '');
-            console.log('clicked', value);
             break; 
 
           case '.': 
@@ -86,7 +85,6 @@ export class CalculatorComponent implements OnInit {
               this.currentNumber = '';
             }
 
-
             // if multiple operators are pressed
             if (this.numbers.length === this.operators.length) {
               this.operators[this.operators.length - 1] = value;
@@ -96,19 +94,20 @@ export class CalculatorComponent implements OnInit {
             }
 
             this.userInput = [...this.userInput, this.operators[this.operators.length-1]];
-
-            console.log(this.numbers, this.operators);
             break;
 
           case '=':
             if (this.currentNumber) {
               this.numbers = [...this.numbers, this.currentNumber];
+              
+              this.userInput = this.result ? [this.result] : [...this.userInput, this.numbers[this.numbers.length-1]];
             }
+
+            // If user entered operator then clicked equals,
+            // the operator is not needed in the equation, so ignore it. 
             if (this.numbers.length === this.operators.length) {
               this.operators.pop();
-            } else {
-              this.userInput = [...this.userInput, this.numbers[this.numbers.length-1]];
-            }
+            } 
             
             let newNumbers = [];
             let newOperators = [];
@@ -130,20 +129,21 @@ export class CalculatorComponent implements OnInit {
                 newNumbers.push(operand1);
                 operand1 = null;
                 newOperators.push(this.operators[i]); 
-
-                if (i === this.operators.length - 1) {
-                  newNumbers.push(this.numbers[i+1]);
-                }
               } 
+
+              if (i === this.operators.length - 1) {
+                let value = operand1 ? operand1 : this.numbers[i+1];
+                newNumbers.push(value);
+              }
             }
 
             // If there are only multiplications and/or divisions then  operand1 has the result:
             this.result = operand1 ? operand1 : this.currentNumber;
 
-            console.log('newNumbers/newOperators', newNumbers, newOperators)
+            console.log('newNumbers/newOperators', newNumbers, newOperators);
 
+            // Pass 2: Add and subtract 
             if (newNumbers.length) {
-              // Pass 2: Add and subtract 
               this.result = +newNumbers[0];
               for (let i = 0; i < newOperators.length; i++) {
                 switch (newOperators[i]) {
@@ -157,12 +157,10 @@ export class CalculatorComponent implements OnInit {
               }
             }
 
-            console.log('result', this.result);
             // Use the result in the next operation
             this.currentNumber = this.result.toString();
             this.numbers = [];
             this.operators = [];
-            this.userInput = [];
         }
       });
 

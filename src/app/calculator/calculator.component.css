@@ -22,7 +22,7 @@
 .result {
   padding: 0 1em;
   color: #fff;
-  
+
 }
 
 .item {
@@ -44,14 +44,26 @@
 }
 
 .clear .item {
-  border: 1px solid wheat;
   justify-self: center;
+    box-shadow: 0px 2px 0px wheat,
+  0px 3px 15px rgba(0,0,0,.4),
+  inset 0px 2px 0px rgba(255,255,255,.3),
+  inset 0px 0px 3px rgba(255,255,255,.5);
 }
 
 .number .item {
-  border: 1px solid wheat;
+  /* border: 1px solid wheat; */
   justify-self: center;
+    /* box-shadow: 0 0 5px 3px rgba(137, 54, 201, 0.8) ,
+    0 0 0 1px wheat inset; */
+
+  box-shadow: 0px 2px 0px #2b638f,
+  0px 3px 15px rgba(0,0,0,.4),
+  inset 0px 2px 0px rgba(255,255,255,.3),
+  inset 0px 0px 3px rgba(255,255,255,.5);
 }
+
+
 
 .result {
   grid-area: result;
@@ -60,8 +72,13 @@
 
 .operator {
   grid-area: operator;
-  background-color: orange;
+  /* background-color: orange; */
   margin: 10px;
+}
+
+.operator .item {
+  background-color: orange;
+  margin-bottom: 0.5em;
 }
 
 .number-container {
