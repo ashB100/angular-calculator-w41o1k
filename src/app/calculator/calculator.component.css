@@ -7,7 +7,7 @@
 
 .container {
   width: 300px;
-  border: 1px solid white;
+  border: 2px solid white;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 70px auto; 
@@ -27,6 +27,11 @@
   color: #fff;
 }
 
+/* Fix the height so the text doesn't move when there isn't any content */
+.result-item {
+  height: 1em;
+}
+
 .item {
   height: 50px;
   width: 50px;
@@ -36,12 +41,6 @@
   user-select: none;
   transition: all 0.1s ease;
   background-color: rgba(0, 0, 0, 0.3);
-}
-
-.evaluate .item {
-  background-color: wheat;
-  margin: 10px;
-  color: black;
 }
 
 .clear {
@@ -61,7 +60,7 @@
 }
 
 .clear .item:active {
-  box-shadow: inset 0 0 5px 2px #2b638f;
+  box-shadow: inset 0 0 3px 2px #2b638f;
   transform: translateY(1px);
   background-color: rgba(0, 0, 0, 0.2);
 }
@@ -85,9 +84,10 @@
 }
 
 .number .item:active {
-  box-shadow: inset 0 0 5px 2px wheat;
+  box-shadow: inset 0 0 3px 2px wheat;
   transform: translateY(1px);
 }
+
 
 .operator {
   grid-area: operator;
@@ -99,6 +99,12 @@
   margin-bottom: 0.5em;
 }
 
+
+.evaluate .item {
+  background-color: wheat;
+  margin: 10px;
+  color: black;
+}
 
 button {
   background: inherit;

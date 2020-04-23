@@ -11,17 +11,10 @@ export class CalculatorComponent implements OnInit {
   @ViewChild("container") containerRef;
   @ViewChild('operand') operandRef;
   @ViewChild('operator') operatorRef;
-  @ViewChild('toggleNegative') toggleNegativeRef;
-  @ViewChild('clear') clearRef;
-  @ViewChild('percentage') percentageRef;
 
   input$: Observable<string>;
   operator$: Observable<string>;
   operand$: Observable<string>;
-  clear$: Observable<string>;
-  toggleNegative$: Observable<string>;
-  percentage$: Observable<string>;
-  currentOperand$: Observable<string>;
 
   multiplication = '×';
   division = '÷';
@@ -37,25 +30,14 @@ export class CalculatorComponent implements OnInit {
 
   lookup = {
     'AC': () => this.reset(),
-    '0': (value) => this.collateOperandString(value),
-    '1': (value) => this.collateOperandString(value),
-    '2': (value) => this.collateOperandString(value),
-    '3': (value) => this.collateOperandString(value),
-    '4': (value) => this.collateOperandString(value),
-    '5': (value) => this.collateOperandString(value),
-    '6': (value) => this.collateOperandString(value),
-    '7': (value) => this.collateOperandString(value),
-    '8': (value) => this.collateOperandString(value),
-    '9': (value) => this.collateOperandString(value),
+    'operand': (value) => this.collateOperandString(value),
     'operator': (value) => this.addOperatorToArray(value),
-    '.': () => this.concatenateDecimalPoint(),
     '+/-': () => this.togglePositiveNegative(),
     '%': () => this.getPercentage(),
     '=': () => this.evaluateResult()
   };
 
   evaluateResult() {
-    console.log('Evaluate Results');
     if (this.currentNumber) {
       this.numbers = [...this.numbers, this.currentNumber];
               
@@ -149,14 +131,9 @@ export class CalculatorComponent implements OnInit {
   }
   
   collateOperandString(value) {
-    this.currentNumber = this.currentNumber + value;
     this.currentNumber = this.currentNumber.replace(/^0+/, '');
-  }
 
-  concatenateDecimalPoint() {
-    if (!this.currentNumber.includes('.')) {
-      this.currentNumber = this.currentNumber + '.';
-    }
+    this.currentNumber = (value === '.' && this.currentNumber.includes('.')) ? this.currentNumber : this.currentNumber + value; 
   }
 
   togglePositiveNegative() {
@@ -182,7 +159,25 @@ export class CalculatorComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.operator$ = fromEvent(this.operatorRef.nativeElement, 'click')
+    fromEvent(this.containerRef.nativeElement, 'click')
+      .pipe(
+        map(event => event.target.textContent)
+      )
+      .subscribe(value => {
+        this.lookup[value](value);
+      })
+
+    fromEvent(this.operandRef.nativeElement, 'click')
+      .pipe(
+        map(event => {
+          event.preventDefault();
+          event.stopPropagation();
+          return event.target.textContent;
+        })
+      )
+      .subscribe(value => this.lookup.operand(value));
+
+    fromEvent(this.operatorRef.nativeElement, 'click')
       .pipe(
         map(event => {
           event.preventDefault();
@@ -194,26 +189,26 @@ export class CalculatorComponent implements OnInit {
         this.lookup.operator(value);
       });
 
-    this.operand$ = fromEvent(this.operandRef.nativeElement, 'click')
-      .pipe(
-        map(event => {
-          // event.stopPropagation();
-          // event.preventDefault();
-          return event.target.textContent;
-        }),
-        scan( (acc, curr) => {
-          acc = acc.replace(/^0+/, '');
-          acc = (curr === '.' && acc.includes('.')) ? acc : acc + curr;
-          console.log('operand$', acc);
-          return acc;
-        }, '')
-      );
+    // this.operand$ = fromEvent(this.operandRef.nativeElement, 'click')
+    //   .pipe(
+    //     map(event => {
+    //       // event.stopPropagation();
+    //       // event.preventDefault();
+    //       return event.target.textContent;
+    //     }),
+    //     scan( (acc, curr) => {
+    //       acc = acc.replace(/^0+/, '');
+    //       acc = (curr === '.' && acc.includes('.')) ? acc : acc + curr;
+    //       console.log('operand$', acc);
+    //       return acc;
+    //     }, '')
+    //   );
 
 
-    this.clear$ = fromEvent(this.clearRef.nativeElement, 'click')
-      .pipe(
-        map(event => '0')
-      );
+    // this.clear$ = fromEvent(this.clearRef.nativeElement, 'click')
+    //   .pipe(
+    //     map(event => '0')
+    //   );
     
     // this.toggleNegative$ = fromEvent(this.toggleNegativeRef.nativeElement, 'click')
     //   .pipe(
@@ -225,26 +220,20 @@ export class CalculatorComponent implements OnInit {
     //   )
     //   .subscribe(value => console.log('Toggle Negative', value));
 
-    this.toggleNegative$ = combineLatest(fromEvent(this.toggleNegativeRef.nativeElement, 'click'), this.operand$)
-      .pipe(
-        map((event, operand) => {
-          console.log('Toggle Negative', operand);
-          return (+operand * -1).toString();
-        })
-      ).subscribe(value => console.log('Toggle Negative', value));
+    // this.toggleNegative$ = combineLatest(fromEvent(this.toggleNegativeRef.nativeElement, 'click'), this.operand$)
+    //   .pipe(
+    //     map((event, operand) => {
+    //       console.log('Toggle Negative', operand);
+    //       return (+operand * -1).toString();
+    //     })
+    //   ).subscribe(value => console.log('Toggle Negative', value));
 
-    this.percentage$ = fromEvent(this.percentageRef.nativeElement, 'click')
-      .pipe(
-        map(event => event.target.textContent)
-      );
+    // this.percentage$ = fromEvent(this.percentageRef.nativeElement, 'click')
+    //   .pipe(
+    //     map(event => event.target.textContent)
+    //   );
 
-    this.input$ = fromEvent(this.containerRef.nativeElement, 'click')
-      .pipe(
-        map(event => event.target.textContent)
-      )
-      .subscribe(value => {
-        this.lookup[value](value);
-      })
+
     // this.input$ = fromEvent(this.containerRef.nativeElement, 'click')
     //   .pipe(
     //     map(event => event.target.textContent)
