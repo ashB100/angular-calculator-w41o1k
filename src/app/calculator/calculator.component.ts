@@ -36,6 +36,7 @@ export class CalculatorComponent implements OnInit {
     // If user entered operator then clicked equals,the operator is not needed in the equation, so ignore it. 
     if (this.numbers.length === this.operators.length) {
       this.operators.pop();
+      this.userInput.pop();
     } 
             
     let newNumbers = [];
@@ -100,12 +101,12 @@ export class CalculatorComponent implements OnInit {
     // if multiple operators are pressed
     if (this.numbers.length === this.operators.length) {
       this.operators[this.operators.length - 1] = value;
+      this.userInput[this.userInput.length - 1] = value;
     }
     else {
       this.operators = [...this.operators, value];
+       this.userInput = [...this.userInput, this.operators[this.operators.length-1]];
     }
-
-    this.userInput = [...this.userInput, this.operators[this.operators.length-1]];
   }
 
   addOperandToArray() {
