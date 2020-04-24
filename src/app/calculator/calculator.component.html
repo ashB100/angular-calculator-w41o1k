@@ -1,23 +1,21 @@
 <div class="container" #container>
 	<div class="result text-align-right">
-
     <p class="result-item text-small"> 
     <span *ngFor="let input of userInput" >
         {{input}} 
     </span>
     </p>
-
-		<p class="result-item">{{ currentNumber ? currentNumber : previousNumber }}</p>
+		<p class="result-item">{{ currentOperand ? currentOperand : previousNumber }}</p>
 	</div>
 
   <div class="clear number-container">
     <button class="item" (click)="reset()">AC</button>
-		<button class="item" (click)="togglePositiveNegative()">+/-</button>
-		<button class="item" (click)="getPercentage()">%</button>
+		<button class="item" (click)="onToggleNegative()">+/-</button>
+		<button class="item" (click)="onPercentageInput()">%</button>
   </div>
 
 	<div class="number number-container" #operand>
-    <button *ngFor="let digit of digitContent" class="item" (click)="collateOperandString(digit)">
+    <button *ngFor="let digit of numberContent" class="item" (click)="onNumberInput(digit)">
       {{digit}}
     </button>
 	</div>

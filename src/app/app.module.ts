@@ -9,6 +9,7 @@ import { CalculatorComponent } from './calculator/calculator.component';
 @NgModule({
   imports:      [ BrowserModule, FormsModule ],
   declarations: [ AppComponent, HelloComponent, CalculatorComponent ],
-  bootstrap:    [ AppComponent ]
+  bootstrap:    [ AppComponent ],
+  providers: []
 })
 export class AppModule { }
