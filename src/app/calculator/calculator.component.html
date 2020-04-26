@@ -1,11 +1,12 @@
 <div class="container" #container>
 	<div class="result text-align-right">
     <p class="result-item text-small"> 
-    <span *ngFor="let input of userInput" >
-        {{input}} 
+    <span *ngFor="let part of equation" >
+        {{ part }}
     </span>
+    <!-- <span>{{ result }}</span> -->
     </p>
-		<p class="result-item">{{ currentOperand ? currentOperand : previousNumber }}</p>
+		<p class="result-item">{{ currentOperand ? currentOperand : result }}</p>
 	</div>
 
   <div class="clear number-container">
@@ -21,7 +22,7 @@
 	</div>
 
 	<div class="operator" #operator>
-		<button class="item" *ngFor="let operator of operatorContent" (click)="collateEquation(operator)">{{operator}}</button>
+		<button class="item" *ngFor="let operator of operatorContent" (click)="onOperatorInput(operator)">{{operator}}</button>
 	</div>
 
 <div class="evaluate">

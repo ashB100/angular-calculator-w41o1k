@@ -4,42 +4,30 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CalculatorService {
-      op = {
-      currentValue: '.',
-      accValue: '23',
-      stripLeadingZero: function() {return this.accValue.replace(/^0+/, '')},
-      concatenateValue: function(acc, curr) {return acc = (curr === '.' && operand.includes('.')) ? acc : acc = curr }
-    };
-
   multiplication = '×';
   division = '÷';
   addition = '+';
   subtraction = '-';
 
-  numberContent = ['7', '8', '9', '4', '5', '6', '1', '2', '3', '0', '.'];
-  operatorContent = [this.division, this.multiplication, this.subtraction, this.addition]
-
-  currentNumber = '0';
-  operators = [];
-  numbers = [];
-  result = 0;
-  userInput = [];
-  previousNumber = '0';
+  private operators = [];
+  private numbers = [];
 
   constructor() { }
 
-  evaluateResult() {
-    if (this.currentNumber) {
-      this.numbers = [...this.numbers, this.currentNumber];
+  evaluateResult(operand, equation, previousResult) {
+    let result;
+    if (operand) {
+      this.numbers = [...this.numbers, operand];
               
-      this.userInput = this.result ? [this.result] : [...this.userInput, this.numbers[this.numbers.length-1]];
+      equation = [...equation, operand, '='];
     }
 
     console.log('Evaluate', this.numbers, this.operators);
+
     // If user entered operator then clicked equals,the operator is not needed in the equation, so ignore it. 
     if (this.numbers.length === this.operators.length) {
       this.operators.pop();
-      this.userInput.pop();
+      equation.pop();
     } 
             
     let newNumbers = [];
@@ -71,59 +59,80 @@ export class CalculatorService {
     }
 
     // If there are only multiplications and/or divisions then  operand1 has the result:
-    this.result = operand1 ? operand1 : this.currentNumber;
+    result = operand1 ? operand1 : operand;
 
     console.log('newNumbers/newOperators', newNumbers, newOperators);
 
     // Pass 2: Add and subtract 
     if (newNumbers.length) {
-      this.result = +newNumbers[0];
+      result = +newNumbers[0];
       for (let i = 0; i < newOperators.length; i++) {
         switch (newOperators[i]) {
           case this.addition:
-            this.result += +newNumbers[i+1];
+            result += +newNumbers[i+1];
             break;
           case this.subtraction:
-            this.result -= +newNumbers[i+1];
+            result -= +newNumbers[i+1];
             break;
         }
       }
     }
 
-    // Use the result in the next operation
-    this.currentNumber = this.result.toString();
+    // // Use the result in the next operation
+    // operand = result.toString();
+    // this.currentOperand = this.result.toString();
     this.numbers = [];
     this.operators = [];
+
+    return {
+      result,
+      operand: result.toString(),
+      equation
+    };
   }
 
-  collateEquation(operand, operator) {
-    if (this.currentNumber) {
-      this.addOperandToArray();
+  collateEquation(operand, operator, equation) {
+    console.log('collateEquation called with:', operand, operator, equation);
+    let userInfo = {
+      equation,
+      operand,
+      result: operand
+    };
+
+    if (operand) {
+      this.addOperandToArray(operand, equation);
+
+      equation = equation[equation.length-1] === '=' ? [operand] : [...equation, operand];
+
+      // reset operand
+      userInfo = {
+        ...userInfo,
+        equation,
+        operand: ''
+      }
     }
 
     // if multiple operators are pressed
     if (this.numbers.length === this.operators.length) {
       this.operators[this.operators.length - 1] = operator;
-      this.userInput[this.userInput.length - 1] = operator;
+
+      equation[equation.length - 1] = operator;
+
     }
     else {
       this.operators = [...this.operators, operator];
-       this.userInput = [...this.userInput, this.operators[this.operators.length-1]];
+
+      equation = [...equation, operator];
     }
+
     return {
-      currentOperand: '',
-      displayValue: '',
-      fullEquation: ''
-    }
+      ...userInfo,
+      equation
+    };
   }
 
-  addOperandToArray() {
-      this.numbers = [...this.numbers, this.currentNumber];
-      this.userInput = [...this.userInput, this.currentNumber];
-
-      // reset currentNumber
-      this.previousNumber = this.currentNumber;
-      this.currentNumber = '';
+  addOperandToArray(operand, equation) {
+    this.numbers = [...this.numbers, operand];
   }
 
   stripLeadingZero(operand) {
@@ -135,10 +144,6 @@ export class CalculatorService {
   }
 
   collateOperandString(operand:string, curr:string) {
-    // this.currentNumber = this.currentNumber.replace(/^0+/, '');
-
-    // this.currentNumber = (curr === '.' && this.currentNumber.includes('.')) ? this.currentNumber : this.currentNumber + curr; 
-
     operand = this.stripLeadingZero(operand);
 
     return this.hasDecimal(operand, curr) ? operand : operand + curr; 
@@ -149,16 +154,13 @@ export class CalculatorService {
   }
 
   getPercentage(operand) {
-    console.log('%', operand, +this.currentNumber / 100)
     return (+operand / 100).toString();
   }
 
   reset() {
-    this.currentNumber = '0';
+    // this.currentNumber = '0';
     this.numbers = [];
     this.operators = [];
-    this.userInput = [];
-    this.result = 0;
   }
 
 

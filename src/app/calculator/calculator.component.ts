@@ -18,28 +18,31 @@ export class CalculatorComponent {
   operatorContent = [this.division, this.multiplication, this.subtraction, this.addition]
 
   currentOperand = '0';
-  // operators = [];
-  // numbers = [];
-  // result = 0;
-  // userInput = [];
-  // previousNumber = '0';
+  result = 0;
+  equation = [];
 
-  operators = this.calculatorService.operators;
-  numbers = this.calculatorService.numbers;
-  // currentNumber = this.calculatorService.currentNumber;
-  result = this.calculatorService.result;
-  userInput = this.calculatorService.userInput;
-  previousNumber = this.calculatorService.previousNumber;
+  evaluateResult() {
+    // if (this.currentOperand) {
+    //   this.equation = this.result ? [this.result] : [...this.equation, this.currentOperand];
+    // }
 
-  evaluateResult = this.calculatorService.evaluateResult;
+    let info = this.calculatorService.evaluateResult (this.currentOperand, this.equation, this.result);
 
-
-  collateEquation = this.calculatorService.collateEquation;
-
-  addOperandToArray = this.calculatorService.addOperandToArray;
+    this.equation = info.equation;
+    this.result = info.result;
+    this.currentOperand = info.operand;
+    // Use the result in the next operation
+    // this.currentOperand = this.result.toString();
+  }
 
   onOperatorInput(operator) {
-    this.calculatorService.collateEquation(this.currentOperand, operator);
+    console.log('onOperator', operator);
+    let info = this.calculatorService.collateEquation(this.currentOperand, operator, this.equation);
+
+    console.log('info', info);
+    this.currentOperand = info.operand;
+    this.equation = info.equation;
+    this.result = info.result;
   }
 
   onNumberInput(num) {
@@ -57,13 +60,10 @@ export class CalculatorComponent {
 
   reset() {
     this.currentOperand = '0';
-    this.numbers = [];
-    this.operators = [];
-    this.userInput = [];
+    this.equation = [];
     this.result = 0;
+    this.calculatorService.reset();
   };
-
-  
 
   constructor(private calculatorService: CalculatorService) {}
 
