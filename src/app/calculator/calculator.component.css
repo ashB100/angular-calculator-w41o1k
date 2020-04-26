@@ -41,6 +41,11 @@
   user-select: none;
   transition: all 0.1s ease;
   background-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 1px;
+}
+
+.item:active {
+  transform: translateY(2px);
 }
 
 .clear {
@@ -49,19 +54,21 @@
 }
 
 .clear .item {
-  box-shadow: 0px 2px 0px #2b638f,
+  box-shadow: 0px 1px 0px #2b638f,
   0px 3px 15px rgba(0,0,0,.4),
   inset 0px 2px 0px rgba(255,255,255,.3),
   inset 0px 0px 3px rgba(255,255,255,.5);
 }
 
 .item:hover {
-  background-color: rgba(0, 0, 0, 0.3);
+  filter: invert();
+  /* background-color: rgba(0, 0, 0, 0.3); */
 }
 
-.clear .item:active {
-  box-shadow: inset 0 0 3px 2px #2b638f;
-  transform: translateY(1px);
+
+.clear .item:active, .number .item:active {
+  box-shadow: none;
+  transform: translateY(3px);
   background-color: rgba(0, 0, 0, 0.2);
 }
 
@@ -77,17 +84,11 @@
 }
 
 .number .item {
-  box-shadow: 0px 2px 0px wheat,
+  box-shadow: 0px 1px 0px wheat,
   0px 3px 15px rgba(0,0,0,.4),
   inset 0px 2px 0px rgba(255,255,255,.3),
   inset 0px 0px 3px rgba(255,255,255,.5);
 }
-
-.number .item:active {
-  box-shadow: inset 0 0 3px 2px wheat;
-  transform: translateY(1px);
-}
-
 
 .operator {
   grid-area: operator;
@@ -98,7 +99,6 @@
   background-color: orange;
   margin-bottom: 0.5em;
 }
-
 
 .evaluate .item {
   background-color: wheat;
