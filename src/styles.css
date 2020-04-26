@@ -6,9 +6,9 @@
 
 body {
   margin: 0;
-  background:  linear-gradient(90deg, rgba(137, 54, 201, 0.2),rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1535068484622-7a077e5aa558?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
+  background: repeating-linear-gradient(rgba(137, 54, 201, 0.2), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1535068484622-7a077e5aa558?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80');
   background-size: cover;
-  height: 100vh;
+  /* height: 100vh; */
   font-family: 'Audiowide', cursive;
 }
 

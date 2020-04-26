@@ -7,6 +7,7 @@
 
 .container {
   width: 300px;
+  margin: auto;
   border: 2px solid white;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -18,11 +19,12 @@
   "number number number operator"
   "number number number operator"
   "number number number evaluate";
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .result {
   grid-area: result;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.4);
   padding: 0 1em;
   color: #fff;
 }
@@ -40,12 +42,22 @@
   justify-self: center;
   user-select: none;
   transition: all 0.1s ease;
-  background-color: rgba(0, 0, 0, 0.2);
-  box-shadow: 1px 1px 1px;
+  background-color: rgba(0, 0, 0, 0.4);
+  box-shadow: 1px 1px 2px  #2b638f;
+  border-radius: 2px;
+}
+
+.item:hover {
+  filter: hue-rotate(90deg);
 }
 
 .item:active {
   transform: translateY(2px);
+  box-shadow: none;
+}
+
+.clear .item:active, .number .item:active {
+  box-shadow: none;
 }
 
 .clear {
@@ -55,21 +67,8 @@
 
 .clear .item {
   box-shadow: 0px 1px 0px #2b638f,
-  0px 3px 15px rgba(0,0,0,.4),
   inset 0px 2px 0px rgba(255,255,255,.3),
   inset 0px 0px 3px rgba(255,255,255,.5);
-}
-
-.item:hover {
-  filter: invert();
-  /* background-color: rgba(0, 0, 0, 0.3); */
-}
-
-
-.clear .item:active, .number .item:active {
-  box-shadow: none;
-  transform: translateY(3px);
-  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .number {
@@ -80,29 +79,42 @@
 .number-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  row-gap: 10px;
+  /* row-gap: 10px; */
 }
 
 .number .item {
   box-shadow: 0px 1px 0px wheat,
-  0px 3px 15px rgba(0,0,0,.4),
   inset 0px 2px 0px rgba(255,255,255,.3),
   inset 0px 0px 3px rgba(255,255,255,.5);
 }
 
 .operator {
   grid-area: operator;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 10px;
   margin: 10px;
 }
 
 .operator .item {
-  background-color: orange;
-  margin-bottom: 0.5em;
+  /* background-color: orange; */
+  background-color: rgb(235, 149, 50);
+  box-shadow: 0px 1px 0px wheat, 
+  inset 0px 2px 0px rgba(255,255,255,.3),
+  inset 0px 0px 5px rgba(255,255,255,.5);
+}
+
+.operator .item:hover {
+  filter: hue-rotate(180deg);
+}
+
+.evaluate {
+  grid-area: evaluate;
+  margin: 0px 10px 20px;
 }
 
 .evaluate .item {
   background-color: wheat;
-  margin: 10px;
   color: black;
 }
 
