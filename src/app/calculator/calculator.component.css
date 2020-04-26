@@ -104,8 +104,8 @@
   inset 0px 0px 5px rgba(255,255,255,.5);
 }
 
-.operator .item:hover {
-  filter: hue-rotate(180deg);
+.operator .item:hover, .evaluate .item:hover {
+  filter: opacity(0.4);
 }
 
 .evaluate {
