@@ -49,6 +49,7 @@
 
 .item:hover {
   filter: hue-rotate(90deg);
+  opacity: 0.6;
 }
 
 .item:active {
@@ -102,10 +103,11 @@
   box-shadow: 0px 1px 0px wheat, 
   inset 0px 2px 0px rgba(255,255,255,.3),
   inset 0px 0px 5px rgba(255,255,255,.5);
+  font-size: 1.2em;
 }
 
 .operator .item:hover, .evaluate .item:hover {
-  filter: opacity(0.4);
+  filter: opacity(0.6);
 }
 
 .evaluate {
@@ -116,6 +118,7 @@
 .evaluate .item {
   background-color: wheat;
   color: black;
+  font-size: 1.2em;
 }
 
 button {
